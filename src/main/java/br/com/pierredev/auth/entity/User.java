@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -19,6 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @EqualsAndHashCode
 public class User implements UserDetails, Serializable {
+    private static final long serialVersionUID = 840917418532642260L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,8 +54,13 @@ public class User implements UserDetails, Serializable {
         return this.permissions;
     }
 
-    public List<String> getRoles(){
-        return null;
+    public List<String> getRoles() {
+        List<String> roles = new ArrayList<>();
+        this.permissions.stream()
+            .forEach(p -> {
+                roles.add(p.getDescription());
+            });
+        return roles;
     }
 
     @Override
