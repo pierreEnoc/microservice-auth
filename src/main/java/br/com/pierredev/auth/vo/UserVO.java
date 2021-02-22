@@ -12,9 +12,10 @@ import java.io.Serializable;
 @AllArgsConstructor
 @EqualsAndHashCode
 public class UserVO implements Serializable {
-    private static final long serialVersionUID = 840917418532642260L;
+
+    private static final long serialVersionUID = -8387927312441830960L;
 
     private String userName;
-
     private String password;
+
 }

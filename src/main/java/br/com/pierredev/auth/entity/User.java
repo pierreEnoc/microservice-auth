@@ -19,8 +19,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class User implements UserDetails, Serializable {
-    private static final long serialVersionUID = 840917418532642260L;
+public class User implements UserDetails, Serializable{
+
+    private static final long serialVersionUID = -9020973236707102285L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,8 +46,8 @@ public class User implements UserDetails, Serializable {
     private Boolean enabled;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_permission", joinColumns = {@JoinColumn(name = "id_user")},
-    inverseJoinColumns = {@JoinColumn(name = "id_permission")})
+    @JoinTable(name = "user_permission" ,  joinColumns = { @JoinColumn(name="id_user")},
+            inverseJoinColumns = { @JoinColumn(name="id_permissions")})
     private List<Permission> permissions;
 
     @Override
@@ -54,12 +55,12 @@ public class User implements UserDetails, Serializable {
         return this.permissions;
     }
 
-    public List<String> getRoles() {
+    public List<String> getRoles(){
         List<String> roles = new ArrayList<>();
         this.permissions.stream()
-            .forEach(p -> {
-                roles.add(p.getDescription());
-            });
+                .forEach( p -> {
+                    roles.add(p.getDescription());
+                });
         return roles;
     }
 

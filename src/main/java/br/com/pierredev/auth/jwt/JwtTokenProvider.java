@@ -18,6 +18,7 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
+
 @Service
 public class JwtTokenProvider {
 
@@ -36,12 +37,12 @@ public class JwtTokenProvider {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    public String createToken(String username, List<String> roles) {
+    public String createToken(String username, List<String> roles){
         Claims claims = Jwts.claims().setSubject(username);
         claims.put("roles", roles);
 
         Date now = new Date();
-        Date validate = new Date(now.getTime() + expire);
+        Date validate =  new Date(now.getTime() + expire);
 
         return Jwts.builder().setClaims(claims).setIssuedAt(now).setExpiration(validate)
                 .signWith(SignatureAlgorithm.HS256, secretKey).compact();
@@ -49,10 +50,10 @@ public class JwtTokenProvider {
 
     public Authentication getAuthentication(String token) {
         UserDetails userDetails = this.userDetailsService.loadUserByUsername(getUserName(token));
-        return  new UsernamePasswordAuthenticationToken(userDetails, "",userDetails.getAuthorities());
+        return new UsernamePasswordAuthenticationToken(userDetails, "",userDetails.getAuthorities());
     }
 
-    private  String getUserName(String token) {
+    private String getUserName(String token) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
     }
 
@@ -65,15 +66,15 @@ public class JwtTokenProvider {
     }
 
     public boolean validateToken(String token) {
-
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
-            if (claims.getBody().getExpiration().before(new Date())) {
+            if(claims.getBody().getExpiration().before(new Date())) {
                 return false;
             }
             return true;
-        }catch (JwtException | IllegalArgumentException e) {
+        } catch(JwtException | IllegalArgumentException e) {
             return false;
         }
     }
+
 }
